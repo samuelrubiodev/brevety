@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
     console.log("Extraction successful:", article);
 
     const { object } = await generateObject({
-      model: openRouter("moonshotai/kimi-k2"),
+      model: openRouter("openai/gpt-5-nano"),
       prompt: `Please extract the following fields from the article:\n\n
         Title: ${article?.title}\n\n Content: ${article?.content}\n\n`,
       system: PROMPT_SYSTEM,

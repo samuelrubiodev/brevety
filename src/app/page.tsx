@@ -1,11 +1,11 @@
 "use client";
 
-import Header from "@/components/Header/header";
 import Input from "@/components/input";
 import Button from "@/components/button";
 import { FormEvent } from "react";
 import { SUMMARY_RESPONSE } from "@/env/env";
 import { useState } from "react";
+import { OrbitProgress } from "react-loading-indicators";
 
 export default function Home() {
   const [summary, setSummary] = useState<SUMMARY_RESPONSE | null>(null);
@@ -45,10 +45,9 @@ export default function Home() {
   }
   
   return (
-    <div>
-      <Header/>
-      <div className="flex justify-center justify-self-center m-10 flex-col">
-        <h1 className="text-black text-5xl">Resumen inteligente de artículos en segundos</h1>
+    <main className="flex-1 bg-gradient-to-br from-blue-300 via-violet-200 to-indigo-200 p-10">
+      <div className="flex justify-center justify-self-center flex-col">
+        <h1 className="text-black text-5xl">Resumen con IA de artículos en segundos</h1>
         <div className="m-10 flex flex-row justify-center w-full">
           <form onSubmit={handleSubmit}>
             <Input className="w-100" placeHolder="Ingrese url de la noticia"/>
@@ -59,14 +58,14 @@ export default function Home() {
         </div>
       </div>
       <div className="flex flex-col justify-center items-center">
-        {isLoading && <p className="text-black">Cargando...</p>}
+        {isLoading && <OrbitProgress color="blue" size="large" easing="ease-in-out" />}
         {summary && (
           <div className="bg-gray-100 text-black p-10 rounded-lg border-gray-300 shadow-md w-1/2 mx-auto">
-            <h2 className="text-3xl">{summary.title}</h2>
+            <h2 className="text-3xl mb-5">{summary.title}</h2>
             <p className="text-lg">{summary.summary}</p>
           </div>
         )}
       </div>
-    </div>
+    </main>
   );
 }
