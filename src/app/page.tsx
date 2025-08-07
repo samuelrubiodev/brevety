@@ -42,16 +42,6 @@ export default function Home() {
     } finally {
       setIsLoading(false);
     }
-
-    const res = await fetch('/api/extract', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ url: form.url.value }),
-    });
-    const data = await res.json()
-    console.log(data.article as SUMMARY_RESPONSE);
   }
   
   return (
@@ -68,10 +58,10 @@ export default function Home() {
           </form>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center bg-gray-100 text-black p-10 rounded-lg shadow-md w-1/2 mx-auto">
-        {isLoading && <p>Cargando...</p>}
+      <div className="flex flex-col justify-center items-center">
+        {isLoading && <p className="text-black">Cargando...</p>}
         {summary && (
-          <div>
+          <div className="bg-gray-100 text-black p-10 rounded-lg border-gray-300 shadow-md w-1/2 mx-auto">
             <h2 className="text-3xl">{summary.title}</h2>
             <p className="text-lg">{summary.summary}</p>
           </div>
