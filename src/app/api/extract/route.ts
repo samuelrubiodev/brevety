@@ -3,6 +3,15 @@
 import { NextResponse } from "next/server";
 import { extract } from '@extractus/article-extractor'
 import type { NextRequest } from "next/server";
+import { createOpenRouter } from '@openrouter/ai-sdk-provider';
+import { generateObject } from "ai";
+import { z } from "zod";
+
+import { PROMPT_SYSTEM } from "@/env/env";
+
+const openRouter = createOpenRouter({
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
 
 export async function POST(req: NextRequest) {
   const { url } = await req.json();
@@ -11,7 +20,23 @@ export async function POST(req: NextRequest) {
   try {
     const article = await extract(url);
     console.log("Extraction successful:", article);
-    return NextResponse.json({ article }, { status: 200 });
+
+    const { object } = await generateObject({
+      model: openRouter("moonshotai/kimi-k2"),
+      prompt: `Please extract the following fields from the article:\n\n
+        Title: ${article?.title}\n\n Content: ${article?.content}\n\n`,
+      system: PROMPT_SYSTEM,
+      schema: z.object({
+        article: z.object({
+          title: z.string(),
+          author: z.string().nullable(),
+          date: z.string().nullable(),
+          source: z.string().nullable(),
+          summary: z.string(),
+        })
+      }),
+    });
+    return NextResponse.json(object, { status: 200 });
 
   } catch (error) {
     console.error("API extract error:", error); 
