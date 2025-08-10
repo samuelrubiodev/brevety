@@ -22,10 +22,22 @@ export async function POST(req: NextRequest) {
     console.log("Extraction successful:", article);
 
     const { object } = await generateObject({
-      model: openRouter("openai/gpt-5-nano"),
+      model: openRouter("qwen/qwen3-235b-a22b-thinking-2507"),
       prompt: `Please extract the following fields from the article:\n\n
         Title: ${article?.title}\n\n Content: ${article?.content}\n\n`,
       system: PROMPT_SYSTEM,
+      providerOptions: {
+        openrouter: {
+          provider: {
+            order: [
+              "parasail/fp8",
+              "deepinfra/fp8",
+              "cerebras",
+              "together"
+            ]
+          }
+        }
+      },
       schema: z.object({
         article: z.object({
           title: z.string(),

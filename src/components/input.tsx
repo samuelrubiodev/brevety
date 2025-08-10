@@ -7,6 +7,7 @@ export default function Input(props: PropsInput) {
   return (
     <input 
       className={`
+        text-black
         bg-blue-200 
         placeholder:text-black
         text-sm border 
